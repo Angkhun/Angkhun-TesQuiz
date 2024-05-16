@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management</title>
+    <script>
+        function addStudent() {
+            const name = document.getElementById('name').value;
+            const age = document.getElementById('age').value;
+            const phone = document.getElementById('phone').value;
+            const email = getElementById('email').value;
+
+
+
+            fetch('/students', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: name, age: age })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                // Refresh the student list or update UI
+                getStudents();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        function getStudents() {
+            fetch('/students')
+                .then(response => response.json())
+                .then(data => {
+                    const studentList = document.getElementById('studentList');
+                    studentList.innerHTML = '';
+                    data.forEach((student, index) => {
+                        const studentItem = document.createElement('div');
+                        studentItem.textContent = `Name: ${student.name}, Age: ${student.age}`;
+                        studentList.appendChild(studentItem);
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            getStudents();
+        });
+    </script>
+</head>
+<body>
+    <h1>Student Management</h1>
+    <form onsubmit="event.preventDefault(); addStudent();">
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="number" id="age" placeholder="Age" required>
+        <input type="number" id="phone" placeholder="Phone" required>
+        <input type="text" id="email" placeholder="Email" required>
+        <button type="submit">insert</button>
+    </form>
+    <div id="studentList"></div>
+</body>
+</html>
